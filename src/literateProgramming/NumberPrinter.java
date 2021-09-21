@@ -11,10 +11,10 @@ public class NumberPrinter {
         this.columnsPerPage = columnsPerPage;
     }
 
-    void print(int[] numbers) {
+    void print(int[] numbers, String title) {
         initialize(numbers);
         while (needToPrintMorePages()) {
-            printHeader();
+            printHeader(title);
             printNumbersOnPage();
             moveToNextPage();
         }
@@ -29,12 +29,8 @@ public class NumberPrinter {
         return getPageOffset() <= getNumberOfNumbers();
     }
 
-    private void printHeader() {
-        System.out.print("The First ");
-        System.out.print(Integer.toString(getNumberOfNumbers()));
-        System.out.print(" Prime Numbers --- Page ");
-        System.out.print(Integer.toString(pageNumber));
-        System.out.println("\n");
+    private void printHeader(String title) {
+        System.out.printf("%s --- Page %d\n%n", title, pageNumber);
     }
 
     private void printNumbersOnPage() {
