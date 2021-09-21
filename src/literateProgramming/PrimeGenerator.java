@@ -1,11 +1,11 @@
 package literateProgramming;
 
+import java.util.ArrayList;
+
 class PrimeGenerator {
     private int numPrimes;
     private int[] primes;
-    private int ord = 2;
-    private int ordmax = 30;
-    private int[] multiples = new int[ordmax + 1];
+    private ArrayList<Integer> multiples = new ArrayList<>();
     private int candidatePrime = 1;
     private int lastPrimeIndex = 1;
 
@@ -37,11 +37,11 @@ class PrimeGenerator {
     }
 
     private void addNextMultipleEntryIfReachedNextPrimeSquare() {
-        if (candidatePrime == primes[ord] * primes[ord]) multiples[ord++] = candidatePrime;
+        if (candidatePrime == primes[getOrd()] * primes[getOrd()]) addNewMultiple();
     }
 
     private boolean candidateIsComposite() {
-        for (int n = 2; n < ord; n++) {
+        for (int n = 2; n < getOrd(); n++) {
             if (candidateIsNthMultiple(n)) return true;
         }
         return false;
@@ -49,12 +49,29 @@ class PrimeGenerator {
 
     private boolean candidateIsNthMultiple(int n) {
         updateNthMultiple(n);
-        return multiples[n] == candidatePrime;
+        return getNthMultiple(n) == candidatePrime;
     }
 
     private void updateNthMultiple(int n) {
-        while (multiples[n] < candidatePrime) {
-            multiples[n] += primes[n] + primes[n];
+        while (getNthMultiple(n) < candidatePrime) {
+            increaseNthMultipleBy(n, primes[n] + primes[n]);
         }
+    }
+
+    private void increaseNthMultipleBy(int n, int amount) {
+        int index = n - 2;
+        multiples.set(index, multiples.get(index) + amount);
+    }
+
+    private void addNewMultiple() {
+        multiples.add(candidatePrime);
+    }
+
+    private int getNthMultiple(int n) {
+        return multiples.get(n - 2);
+    }
+
+    public int getOrd() {
+        return multiples.size() + 2;
     }
 }
