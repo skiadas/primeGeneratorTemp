@@ -4,8 +4,6 @@ public class NumberPrinter {
     private final int rowsPerPage;
     private final int columnsPerPage;
     private int pageNumber;
-    private int pageOffset;
-    private int numberOfNumbers;
     private int[] numbers;
 
     public NumberPrinter(int rowsPerPage, int columnsPerPage) {
@@ -24,18 +22,16 @@ public class NumberPrinter {
 
     private void initialize(int[] numbers) {
         pageNumber = 1;
-        pageOffset = 1;
         this.numbers = numbers;
-        numberOfNumbers = this.numbers.length - 1;
     }
 
     private boolean needToPrintMorePages() {
-        return pageOffset <= numberOfNumbers;
+        return getPageOffset() <= getNumberOfNumbers();
     }
 
     private void printHeader() {
         System.out.print("The First ");
-        System.out.print(Integer.toString(numberOfNumbers));
+        System.out.print(Integer.toString(getNumberOfNumbers()));
         System.out.print(" Prime Numbers --- Page ");
         System.out.print(Integer.toString(pageNumber));
         System.out.println("\n");
@@ -44,14 +40,14 @@ public class NumberPrinter {
     private void printNumbersOnPage() {
         for (int row = 0; row < rowsPerPage; row++) {
             for (int col = 0; col < columnsPerPage; col++) {
-                printNumberAt(pageOffset + row + col * rowsPerPage);
+                printNumberAt(getPageOffset() + row + col * rowsPerPage);
             }
             System.out.println();
         }
     }
 
     private void printNumberAt(int index) {
-        if (index <= numberOfNumbers) {
+        if (index <= getNumberOfNumbers()) {
             System.out.printf("%10d", numbers[index]);
         }
     }
@@ -59,6 +55,13 @@ public class NumberPrinter {
     private void moveToNextPage() {
         System.out.println("\f");
         pageNumber++;
-        pageOffset += rowsPerPage * columnsPerPage;
+    }
+
+    public int getPageOffset() {
+        return (pageNumber - 1) * rowsPerPage * columnsPerPage + 1;
+    }
+
+    public int getNumberOfNumbers() {
+        return numbers.length - 1;
     }
 }
